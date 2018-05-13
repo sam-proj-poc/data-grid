@@ -1,0 +1,32 @@
+<div>
+    <div class="filter-form">
+        <form class="text-left">
+            <span class="filter-by">Filter (By Reference Id): </span>
+            <input type="text" />
+        </form>
+    </div>
+
+    <div id="data-table" *ngIf="rows && rows.length">
+        <table class="table table-hover text-left">
+            <thead>
+                <tr>
+                    <th *ngFor="let column of columns">
+                        <span (click)="onColumnHeadingClick(column)">
+                            {{ column.name }}
+                        </span>
+                    </th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr *ngFor="let row of rows">
+                    <td>{{ row.Id }}</td>
+                    <td>{{ row.RecordId }}</td>
+                    <td>{{ row.ReferenceId }}</td>
+                    <td>{{ row.SettlementBatchId }}</td>
+                    <td>{{ row.Description }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
