@@ -14,6 +14,9 @@ export class TransactionComponent implements OnChanges {
     _rows: ITransaction[];
     _name: string;
 
+    _referenceIdFilter: string;
+    filteredRows: ITransaction[];
+
 
     constructor() {
         this._columns = [
@@ -23,6 +26,8 @@ export class TransactionComponent implements OnChanges {
             { name: "Settlement Batch Id", prop: "SettlementBatchId", ascending: false },
             { name: "Description", prop:"Description", ascending: false }
         ];
+
+        this._referenceIdFilter = "";
     }
 
     get columns(): IColumnHeading[] {
@@ -30,17 +35,40 @@ export class TransactionComponent implements OnChanges {
     }
 
     get rows(): ITransaction[] {
-        return this._rows;
+        return this.filteredRows;
     }
 
     @Input() set rows(transactions: ITransaction[]) {
         this._rows = transactions;
+        this.filteredRows = this._rows;
+        this.performReferenceIdFilter();
     }
+
+    get referenceIdFilter(): string {
+        return this._referenceIdFilter;
+    }
+
+    set referenceIdFilter(value: string) {
+        this._referenceIdFilter = value;
+        this.filteredRows = this._rows;
+        this.performReferenceIdFilter();
+    }
+
 
     onColumnHeadingClick(column: IColumnHeading): void {
         column.ascending = !column.ascending;
         console.log(column.name);
         console.log(column.ascending);
+    }
+
+
+    performReferenceIdFilter(): void {
+        let filterBy: string = this._referenceIdFilter.toLocaleLowerCase();
+        if (filterBy) {
+            this.filteredRows = this.filteredRows.filter((transaction: ITransaction) => {
+                return transaction.ReferenceId.toLocaleLowerCase().indexOf(filterBy) !== -1;
+            });
+        }
     }
 
 
